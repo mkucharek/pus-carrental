@@ -1,6 +1,8 @@
 package pl.lodz.p.stores;
 
+import pl.lodz.p.beans.Brand;
 import pl.lodz.p.beans.Car;
+import pl.lodz.p.beans.Model;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -43,49 +45,49 @@ public enum CarStore {
         cars.put(car.getId(), car);
     }
 
-    public Set<String> getAllBrands() {
+    public Set<Brand> getAllBrands() {
 
         if (cars.isEmpty()) {
             return Collections.emptySet();
         }
 
-        Set<String> brandSet = new HashSet<>();
+        Set<Brand> brandSet = new HashSet<>();
 
         for (Car car : cars.values()) {
-            brandSet.add(car.getBrandName());
+            brandSet.add(new Brand(car.getBrandName()));
         }
 
         return brandSet;
 
     }
 
-    public Set<String> getAllModels() {
+    public Set<Model> getAllModels() {
 
         if (cars.isEmpty()) {
             return Collections.emptySet();
         }
 
-        Set<String> modelSet = new HashSet<>();
+        Set<Model> modelSet = new HashSet<>();
 
         for (Car car : cars.values()) {
-            modelSet.add(car.getModelName());
+            modelSet.add(new Model(new Brand(car.getBrandName()), car.getModelName()));
         }
 
         return modelSet;
 
     }
 
-    public Set<String> getModelsByBrand(String brandName) {
+    public Set<Model> getModelsByBrand(String brandName) {
 
         if (cars.isEmpty()) {
             return Collections.emptySet();
         }
 
-        Set<String> modelSet = new HashSet<>();
+        Set<Model> modelSet = new HashSet<>();
 
         for (Car car : cars.values()) {
             if (car.getBrandName().equals(brandName)) {
-                modelSet.add(car.getModelName());
+                modelSet.add(new Model(new Brand(car.getBrandName()), car.getModelName()));
             }
         }
 

@@ -1,11 +1,12 @@
 package pl.lodz.p.resources;
 
-import org.apache.commons.lang.StringUtils;
+import pl.lodz.p.beans.Brand;
 import pl.lodz.p.stores.CarStore;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import java.util.Collection;
 
 /**
  * @author mkucharek
@@ -14,9 +15,9 @@ import javax.ws.rs.Produces;
 public class BrandsResource {
 
     @GET
-    @Produces("text/plain")
-    public String getAllBrands() {
-        return StringUtils.join(CarStore.INSTANCE.getAllBrands(), ResourceUtil.SEPARATOR_COMMA);
+    @Produces({"application/xml", "application/json"})
+    public Collection<Brand> getAllBrands() {
+        return CarStore.INSTANCE.getAllBrands();
     }
 
 }
