@@ -3,8 +3,11 @@ package pl.lodz.p.stores;
 import pl.lodz.p.beans.Car;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -24,7 +27,7 @@ public enum CarStore {
         cars.put(3, new Car(3, "vw", "golf"));
     }
 
-    public Collection<Car> getAll() {
+    public Collection<Car> getAllCars() {
         return cars.values();
     }
 
@@ -38,6 +41,55 @@ public enum CarStore {
         }
 
         cars.put(car.getId(), car);
+    }
+
+    public Set<String> getAllBrands() {
+
+        if (cars.isEmpty()) {
+            return Collections.emptySet();
+        }
+
+        Set<String> brandSet = new HashSet<>();
+
+        for (Car car : cars.values()) {
+            brandSet.add(car.getBrandName());
+        }
+
+        return brandSet;
+
+    }
+
+    public Set<String> getAllModels() {
+
+        if (cars.isEmpty()) {
+            return Collections.emptySet();
+        }
+
+        Set<String> modelSet = new HashSet<>();
+
+        for (Car car : cars.values()) {
+            modelSet.add(car.getModelName());
+        }
+
+        return modelSet;
+
+    }
+
+    public Set<String> getModelsByBrand(String brandName) {
+
+        if (cars.isEmpty()) {
+            return Collections.emptySet();
+        }
+
+        Set<String> modelSet = new HashSet<>();
+
+        for (Car car : cars.values()) {
+            if (car.getBrandName().equals(brandName)) {
+                modelSet.add(car.getModelName());
+            }
+        }
+
+        return modelSet;
     }
 
 }
