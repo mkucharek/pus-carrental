@@ -2,7 +2,7 @@ package pl.lodz.p.resources;
 
 import org.apache.commons.lang.StringUtils;
 import pl.lodz.p.beans.Car;
-import pl.lodz.p.stores.CarStore;
+import pl.lodz.p.stores.CarRentalStore;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
@@ -17,7 +17,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.Collection;
-import java.util.Collections;
 
 /**
  * @author mkucharek
@@ -33,10 +32,10 @@ public class CarsResource {
             @DefaultValue("true") @QueryParam("available") Boolean available) {
 
         if (StringUtils.isEmpty(brandName) && StringUtils.isEmpty(modelName)) {
-            return CarStore.INSTANCE.getAllCars();
+            return CarRentalStore.INSTANCE.getAllCars();
 
         } else {
-            return Collections.emptyList();
+            return CarRentalStore.INSTANCE.filterCarsBy(brandName, modelName);
         }
 
 
@@ -47,7 +46,7 @@ public class CarsResource {
     @Produces({"application/xml", "application/json"})
     public Response getCar(@PathParam("id") int id) {
 
-        final Car car = CarStore.INSTANCE.getOne(id);
+        final Car car = CarRentalStore.INSTANCE.getOne(id);
 
         if (null != car) {
             return Response.ok(car).build();
@@ -69,7 +68,7 @@ public class CarsResource {
         car.setId(id);
 
         // adding the car
-        CarStore.INSTANCE.addOrUpdate(car);
+        CarRentalStore.INSTANCE.addOrUpdate(car);
 
         return Response.created(uriInfo.getAbsolutePath())
                 .build();

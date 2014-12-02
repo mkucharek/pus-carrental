@@ -2,7 +2,7 @@ package pl.lodz.p.resources;
 
 import org.apache.commons.lang.StringUtils;
 import pl.lodz.p.beans.Model;
-import pl.lodz.p.stores.CarStore;
+import pl.lodz.p.stores.CarRentalStore;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -27,10 +27,10 @@ public class ModelsResource {
     }
 
     private Collection<Model> getAllModels() {
-        return CarStore.INSTANCE.getAllModels();
+        return CarRentalStore.INSTANCE.getAllModels();
     }
 
     private Collection<Model> getModelsByBrand(String brandName) {
-        return CarStore.INSTANCE.getModelsByBrand(brandName);
+        return CarRentalStore.INSTANCE.getModelsByBrand(brandName);
     }
 }

@@ -1,5 +1,9 @@
 package pl.lodz.p.stores;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Collections2;
+import org.apache.commons.lang.StringUtils;
 import pl.lodz.p.beans.Brand;
 import pl.lodz.p.beans.Car;
 import pl.lodz.p.beans.Model;
@@ -15,12 +19,12 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author mkucharek
  */
-public enum CarStore {
+public enum CarRentalStore {
     INSTANCE;
 
     private Map<Integer, Car> cars = new ConcurrentHashMap<>();
 
-    CarStore() {
+    CarRentalStore() {
         cars = new HashMap<>();
 
         // some test data to start with
@@ -31,6 +35,26 @@ public enum CarStore {
 
     public Collection<Car> getAllCars() {
         return cars.values();
+    }
+
+    public Collection<Car> filterCarsBy(final String brandName, final String modelName) {
+
+        Predicate<Car> brandPredicate = new Predicate<Car>() {
+            @Override
+            public boolean apply(Car car) {
+                return StringUtils.isEmpty(brandName) || brandName.equals(car.getBrandName());
+            }
+        };
+
+        Predicate<Car> modelPredicate = new Predicate<Car>() {
+            @Override
+            public boolean apply(Car car) {
+                return StringUtils.isEmpty(modelName) || modelName.equals(car.getModelName());
+            }
+        };
+
+        return Collections2.filter(getAllCars(), Predicates.and(brandPredicate, modelPredicate));
+
     }
 
     public Car getOne(Integer id) {
@@ -77,21 +101,14 @@ public enum CarStore {
 
     }
 
-    public Set<Model> getModelsByBrand(String brandName) {
+    public Collection<Model> getModelsByBrand(final String brandName) {
 
-        if (cars.isEmpty()) {
-            return Collections.emptySet();
-        }
-
-        Set<Model> modelSet = new HashSet<>();
-
-        for (Car car : cars.values()) {
-            if (car.getBrandName().equals(brandName)) {
-                modelSet.add(new Model(new Brand(car.getBrandName()), car.getModelName()));
+        return new HashSet<>(Collections2.filter(getAllModels(), new Predicate<Model>() {
+            @Override
+            public boolean apply(Model model) {
+                return model.getBrand().getName().equals(brandName);
             }
-        }
-
-        return modelSet;
+        }));
     }
 
 }
