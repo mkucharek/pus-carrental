@@ -1,9 +1,9 @@
 package pl.lodz.p.domain;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Sets;
+import jersey.repackaged.com.google.common.base.Predicate;
+import jersey.repackaged.com.google.common.base.Predicates;
+import jersey.repackaged.com.google.common.collect.Collections2;
+import jersey.repackaged.com.google.common.collect.Sets;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Arrays;
