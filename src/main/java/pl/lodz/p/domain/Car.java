@@ -1,4 +1,4 @@
-package pl.lodz.p.beans;
+package pl.lodz.p.domain;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -16,14 +16,17 @@ public class Car {
 
     private String modelName;
 
+    private Boolean available;
+
     // This is extremely important! Without it, JAXB will fail to perform XML <-> Object transformation
     public Car() {
     }
 
-    public Car(Integer id, String brandName, String modelName) {
+    public Car(Integer id, String brandName, String modelName, Boolean available) {
         this.id = id;
         this.brandName = brandName;
         this.modelName = modelName;
+        this.available = available;
     }
 
     @XmlAttribute
@@ -53,13 +56,22 @@ public class Car {
         this.modelName = modelName;
     }
 
+    @XmlElement
+    public Boolean getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(Boolean available) {
+        this.available = available;
+    }
+
     @Override
     public String toString() {
         return "Car{" +
                 "id=" + id +
                 ", brandName='" + brandName + '\'' +
                 ", modelName='" + modelName + '\'' +
+                ", available=" + available +
                 '}';
     }
-
 }

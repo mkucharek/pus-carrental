@@ -1,4 +1,4 @@
-package pl.lodz.p.beans;
+package pl.lodz.p.domain;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -48,5 +48,12 @@ public class Brand {
     @Override
     public int hashCode() {
         return name != null ? name.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Brand{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }

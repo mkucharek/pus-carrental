@@ -1,7 +1,8 @@
 package pl.lodz.p.resources;
 
-import pl.lodz.p.beans.Brand;
-import pl.lodz.p.stores.CarRentalStore;
+import org.apache.commons.lang.StringUtils;
+import pl.lodz.p.domain.Brand;
+import pl.lodz.p.domain.CarRentalService;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -14,10 +15,18 @@ import java.util.Collection;
 @Path("brands")
 public class BrandsResource {
 
+    private final static char COMMA_SEPARATOR = ',';
+
     @GET
     @Produces({"application/xml", "application/json"})
     public Collection<Brand> getAllBrands() {
-        return CarRentalStore.INSTANCE.getAllBrands();
+        return CarRentalService.INSTANCE.getAllBrands();
+    }
+
+    @GET
+    @Produces("text/plain")
+    public String getAllBrandsAsText() {
+        return StringUtils.join(getAllBrands(), COMMA_SEPARATOR);
     }
 
 }

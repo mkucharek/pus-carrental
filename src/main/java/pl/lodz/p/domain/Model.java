@@ -1,4 +1,4 @@
-package pl.lodz.p.beans;
+package pl.lodz.p.domain;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;

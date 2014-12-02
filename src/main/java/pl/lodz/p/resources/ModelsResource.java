@@ -1,8 +1,8 @@
 package pl.lodz.p.resources;
 
 import org.apache.commons.lang.StringUtils;
-import pl.lodz.p.beans.Model;
-import pl.lodz.p.stores.CarRentalStore;
+import pl.lodz.p.domain.Model;
+import pl.lodz.p.domain.CarRentalService;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -20,17 +20,9 @@ public class ModelsResource {
     @Produces({"application/xml", "application/json" })
     public Collection<Model> filterByBrand(@QueryParam("brandName") String brandName) {
         if (StringUtils.isEmpty(brandName)) {
-            return getAllModels();
+            return CarRentalService.INSTANCE.getAllModels();
         } else {
-            return getModelsByBrand(brandName);
+            return CarRentalService.INSTANCE.getModelsByBrand(brandName);
         }
-    }
-
-    private Collection<Model> getAllModels() {
-        return CarRentalStore.INSTANCE.getAllModels();
-    }
-
-    private Collection<Model> getModelsByBrand(String brandName) {
-        return CarRentalStore.INSTANCE.getModelsByBrand(brandName);
     }
 }
