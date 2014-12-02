@@ -1,6 +1,8 @@
 package pl.lodz.p.resources;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pl.lodz.p.domain.Car;
 import pl.lodz.p.domain.CarNotFoundException;
 import pl.lodz.p.domain.CarRentalService;
@@ -15,8 +17,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
@@ -27,6 +31,8 @@ import java.util.Collection;
  */
 @Path("cars")
 public class CarsResource {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CarsResource.class);
 
     @GET
     @Produces({"application/xml", "application/json"})
@@ -55,18 +61,22 @@ public class CarsResource {
     @GET
     @Path("{id}")
     @Produces({"application/xml", "application/json"})
-    public Response getCar(@PathParam("id") int id) {
+    public Response getCar(@PathParam("id") int id, @Context Request request) {
 
         final Car car = CarRentalService.INSTANCE.getCarById(id);
 
-        if (null != car) {
-            return Response.ok(car).build();
-
-        } else {
+        if (null == car) {
             // CarNotFoundException extends WebApplicationException, so it will be handled by Jersey
             throw new CarNotFoundException(id);
-
         }
+
+        LOGGER.debug("Found {}", car);
+
+        CacheControl cacheControl = new CacheControl();
+        cacheControl.setMaxAge(10);
+
+        return Response.ok(car).cacheControl(cacheControl).build();
+
     }
 
     @POST
