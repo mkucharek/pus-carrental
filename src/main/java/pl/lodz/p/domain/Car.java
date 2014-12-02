@@ -22,7 +22,7 @@ public class Car {
     public Car() {
     }
 
-    public Car(Integer id, String brandName, String modelName, Boolean available) {
+    public Car(String brandName, String modelName, Boolean available) {
         this.id = id;
         this.brandName = brandName;
         this.modelName = modelName;

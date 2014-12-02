@@ -52,8 +52,16 @@ public enum CarRentalService {
         return CarRentalStore.INSTANCE.getOne(id);
     }
 
-    public void addOrUpdate(Car car) {
-        CarRentalStore.INSTANCE.addOrUpdate(car);
+    public void updateCar(Integer carId, Car car) {
+
+        if (null != car.getId() && !carId.equals(car.getId())) {
+            throw new IllegalStateException("carId must match car#getId to perform an update");
+        }
+
+        // adjust id
+        car.setId(carId);
+
+        CarRentalStore.INSTANCE.update(car);
     }
 
     public Set<Brand> getAllBrands() {
@@ -71,5 +79,13 @@ public enum CarRentalService {
                 return model.getBrand().getName().equals(brandName);
             }
         });
+    }
+
+    public Integer addCar(Car car) {
+        return CarRentalStore.INSTANCE.add(car);
+    }
+
+    public void deleteCar(Integer carId) {
+        CarRentalStore.INSTANCE.deleteCar(carId);
     }
 }
