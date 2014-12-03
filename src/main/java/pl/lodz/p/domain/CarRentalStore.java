@@ -39,10 +39,6 @@ enum CarRentalStore {
     }
 
     public Integer add(Car car) {
-        if (null != car.getId()) {
-            throw new IllegalArgumentException("Cannot add a car with ID already defined");
-        }
-
         Integer id = idCounter.incrementAndGet();
 
         car.setId(id);
@@ -54,10 +50,6 @@ enum CarRentalStore {
     public void update(Car car) {
         if (null == car.getId()) {
             throw new IllegalArgumentException("Cannot update a car that has no ID");
-        }
-
-        if (!cars.containsKey(car.getId())) {
-            throw new IllegalArgumentException("The car with id=" + car.getId() + " does not exist in the store");
         }
 
         cars.put(car.getId(), car);
@@ -96,10 +88,6 @@ enum CarRentalStore {
     }
 
     public void deleteCar(Integer carId) {
-        if (!cars.containsKey(carId)) {
-            throw new IllegalArgumentException("The car with id=" + carId + " does not exist in the store");
-        }
-
         cars.remove(carId);
     }
 }

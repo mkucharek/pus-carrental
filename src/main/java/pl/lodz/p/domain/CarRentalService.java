@@ -54,8 +54,17 @@ public enum CarRentalService {
 
     public void updateCar(Integer carId, Car car) {
 
-        if (null != car.getId() && !carId.equals(car.getId())) {
-            throw new IllegalStateException("carId must match car#getId to perform an update");
+        if (null == car.getId()) {
+            // intentional NullPointerException for demonstation purposes
+            throw new NullPointerException("car#getId must not be null");
+        }
+
+        if (!carId.equals(car.getId())) {
+            throw new IllegalArgumentException("carId must match car#getId to perform an update");
+        }
+
+        if (null == CarRentalStore.INSTANCE.getOne(carId)) {
+            throw new CarNotFoundException(carId);
         }
 
         // adjust id
@@ -82,10 +91,18 @@ public enum CarRentalService {
     }
 
     public Integer addCar(Car car) {
+        if (null != car.getId()) {
+            throw new IllegalArgumentException("Cannot add a car with ID already defined");
+        }
+
         return CarRentalStore.INSTANCE.add(car);
     }
 
     public void deleteCar(Integer carId) {
+        if (null == CarRentalStore.INSTANCE.getOne(carId)) {
+            throw new CarNotFoundException(carId);
+        }
+
         CarRentalStore.INSTANCE.deleteCar(carId);
     }
 }

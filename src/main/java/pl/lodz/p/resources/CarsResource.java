@@ -2,6 +2,7 @@ package pl.lodz.p.resources;
 
 import org.apache.commons.lang.StringUtils;
 import pl.lodz.p.domain.Car;
+import pl.lodz.p.domain.CarNotFoundException;
 import pl.lodz.p.domain.CarRentalService;
 
 import javax.ws.rs.Consumes;
@@ -52,7 +53,8 @@ public class CarsResource {
             return Response.ok(car).build();
 
         } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            // CarNotFoundException extends WebApplicationException, so it will be handled by Jersey
+            throw new CarNotFoundException(id);
 
         }
     }
@@ -61,16 +63,7 @@ public class CarsResource {
     @Consumes({"application/xml", "application/json"})
     public Response addCar(@Context UriInfo uriInfo, Car car) {
 
-        Integer id;
-        try {
-            id = CarRentalService.INSTANCE.addCar(car);
-
-        } catch (IllegalArgumentException e) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.BAD_REQUEST)
-                            .entity(e.getMessage())
-                            .build());
-        }
+        Integer id = CarRentalService.INSTANCE.addCar(car);
 
         return Response.created(
                 UriBuilder.fromUri(uriInfo.getRequestUri())
@@ -86,15 +79,11 @@ public class CarsResource {
 
         try {
             CarRentalService.INSTANCE.updateCar(id, car);
-
-        } catch (IllegalStateException e) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.BAD_REQUEST)
-                            .entity(e.getMessage())
-                            .build());
-
-        } catch (IllegalArgumentException e) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+        } catch (NullPointerException e) {
+            // wrapping regular exception with WebApplicationException
+            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+                    .entity(e.getMessage())
+                    .build());
         }
 
         return Response.noContent().build();
@@ -105,12 +94,7 @@ public class CarsResource {
     @Path("{id}")
     public Response deleteCar(@PathParam("id") Integer id) {
 
-        try {
-            CarRentalService.INSTANCE.deleteCar(id);
-
-        } catch (IllegalArgumentException e) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
+        CarRentalService.INSTANCE.deleteCar(id);
 
         return Response.noContent().build();
 
