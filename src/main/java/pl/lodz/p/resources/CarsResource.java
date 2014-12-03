@@ -16,6 +16,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
@@ -29,17 +30,26 @@ public class CarsResource {
 
     @GET
     @Produces({"application/xml", "application/json"})
-    public Collection<Car> getCars(
+    public Response getCars(
             @MatrixParam("brandName") String brandName,
             @MatrixParam("modelName") String modelName,
             @MatrixParam("available") Boolean available) {
 
+        final Response.ResponseBuilder rb = Response.ok();
+
         if (StringUtils.isEmpty(brandName) && StringUtils.isEmpty(modelName) && null == available) {
-            return CarRentalService.INSTANCE.getAllCars();
+            rb.entity(new GenericEntity<Collection<Car>>(CarRentalService.INSTANCE.getAllCars()) {});
 
         } else {
-            return CarRentalService.INSTANCE.getAllCarsFilteredBy(brandName, modelName, available);
+            rb.entity(
+                    new GenericEntity<Collection<Car>>(
+                            CarRentalService.INSTANCE.getAllCarsFilteredBy(brandName, modelName, available)) {});
         }
+
+        rb.link(UriBuilder.fromResource(BrandsResource.class).build(), "brands");
+        rb.link(UriBuilder.fromResource(ModelsResource.class).build(), "models");
+
+        return rb.build();
     }
 
     @GET
