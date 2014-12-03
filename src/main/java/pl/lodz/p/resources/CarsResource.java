@@ -76,7 +76,7 @@ public class CarsResource {
         CacheControl cacheControl = new CacheControl();
         cacheControl.setMaxAge(10);
 
-        EntityTag entityTag = new EntityTag(car.hashCode() + "");
+        EntityTag entityTag = new EntityTag(computeTag(car));
 
         LOGGER.debug("Computed ETag: {}", entityTag.getValue());
 
@@ -111,7 +111,22 @@ public class CarsResource {
     @PUT
     @Path("{id}")
     @Consumes({"application/xml", "application/json"})
-    public Response updateCar(@Context UriInfo uriInfo, @PathParam("id") Integer id, Car car) {
+    public Response updateCar(@Context UriInfo uriInfo,
+                              @Context Request request,
+                              @PathParam("id") Integer id, Car car) {
+
+        final Car existingCar = CarRentalService.INSTANCE.getCarById(id);
+
+        EntityTag existingTag = new EntityTag(computeTag(existingCar));
+
+        final Response.ResponseBuilder responseBuilder = request.evaluatePreconditions(existingTag);
+
+        if (responseBuilder != null) {
+            LOGGER.debug("ETag does NOT match - returning 412");
+            return responseBuilder.build();
+        }
+
+        LOGGER.debug("ETag matches - performing update");
 
         try {
             CarRentalService.INSTANCE.updateCar(id, car);
@@ -124,6 +139,10 @@ public class CarsResource {
 
         return Response.noContent().build();
 
+    }
+
+    private String computeTag(Car existingCar) {
+        return existingCar.hashCode() + "";
     }
 
     @DELETE
