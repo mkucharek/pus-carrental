@@ -19,6 +19,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
@@ -75,7 +76,22 @@ public class CarsResource {
         CacheControl cacheControl = new CacheControl();
         cacheControl.setMaxAge(10);
 
-        return Response.ok(car).cacheControl(cacheControl).build();
+        EntityTag entityTag = new EntityTag(car.hashCode() + "");
+
+        LOGGER.debug("Computed ETag: {}", entityTag.getValue());
+
+        final Response.ResponseBuilder responseBuilder = request.evaluatePreconditions(entityTag);
+
+        if (null != responseBuilder) {
+            LOGGER.debug("ETag unchanged - returning metadata");
+            return responseBuilder.status(Response.Status.NOT_MODIFIED)
+                    .cacheControl(cacheControl)
+                    .tag(entityTag)
+                    .build();
+        }
+
+        LOGGER.debug("ETag has changed - returning new representation");
+        return Response.ok(car).cacheControl(cacheControl).tag(entityTag).build();
 
     }
 
