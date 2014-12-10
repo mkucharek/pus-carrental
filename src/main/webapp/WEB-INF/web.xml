@@ -15,4 +15,53 @@
         <servlet-name>Jersey Web Application</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
+
+
+    <!-- security configuration -->
+    <security-constraint>
+        <display-name>Authentication Constraint</display-name>
+        <web-resource-collection>
+            <web-resource-name>all</web-resource-name>
+            <description/>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>cr-user</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+
+    <security-constraint>
+        <display-name>Authentication Constraint</display-name>
+        <web-resource-collection>
+            <web-resource-name>car-admin</web-resource-name>
+            <description/>
+            <url-pattern>/cars</url-pattern>
+            <http-method>POST</http-method>
+            <http-method>PUT</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>cr-admin</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+
+    </security-constraint>
+
+    <security-role>
+        <description>Regular user</description>
+        <role-name>cr-user</role-name>
+    </security-role>
+    <security-role>
+        <description>Admin user</description>
+        <role-name>cr-admin</role-name>
+    </security-role>
+
+    <login-config>
+        <auth-method>BASIC</auth-method>
+    </login-config>
+
 </web-app>

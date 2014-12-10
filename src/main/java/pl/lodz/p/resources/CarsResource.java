@@ -23,6 +23,7 @@ import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.util.Collection;
@@ -38,6 +39,7 @@ public class CarsResource {
     @GET
     @Produces({"application/xml", "application/json"})
     public Response getCars(
+            @Context SecurityContext sc,
             @MatrixParam("brandName") String brandName,
             @MatrixParam("modelName") String modelName,
             @MatrixParam("available") Boolean available) {
@@ -97,7 +99,11 @@ public class CarsResource {
 
     @POST
     @Consumes({"application/xml", "application/json"})
-    public Response addCar(@Context UriInfo uriInfo, Car car) {
+    public Response addCar(@Context UriInfo uriInfo, @Context SecurityContext sc, Car car) {
+
+        if (!sc.isSecure() || !sc.isUserInRole("cr-admin")) {
+            throw new WebApplicationException(Response.Status.UNAUTHORIZED);
+        }
 
         Integer id = CarRentalService.INSTANCE.addCar(car);
 
