@@ -36,7 +36,7 @@ public class BrandsResourceIT {
     }
 
     @Test
-    public void shouldForbidPost() {
+    public void postShouldNotBeAllowed() {
         //when
         final Response response = brands.request().post(TestUtil.ANY_ENTITY);
 
@@ -45,7 +45,7 @@ public class BrandsResourceIT {
     }
 
     @Test
-    public void shouldForbidPut() {
+    public void putShouldNotBeAllowed() {
         //when
         final Response response = brands.request().put(TestUtil.ANY_ENTITY);
 
@@ -54,7 +54,7 @@ public class BrandsResourceIT {
     }
 
     @Test
-    public void shouldForbidDelete() {
+    public void deleteShouldNotBeAllowed() {
         //when
         final Response response = brands.request().delete();
 
