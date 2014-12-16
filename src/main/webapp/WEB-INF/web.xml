@@ -26,7 +26,6 @@
             <description/>
             <url-pattern>/cars</url-pattern>
             <http-method>POST</http-method>
-            <http-method>PUT</http-method>
         </web-resource-collection>
         <auth-constraint>
             <role-name>cr-admin</role-name>
