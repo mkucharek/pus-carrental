@@ -101,10 +101,6 @@ public class CarsResource {
     @Consumes({"application/xml", "application/json"})
     public Response addCar(@Context UriInfo uriInfo, @Context SecurityContext sc, Car car) {
 
-        if (!sc.isSecure() || !sc.isUserInRole("cr-admin")) {
-            throw new WebApplicationException(Response.Status.UNAUTHORIZED);
-        }
-
         Integer id = CarRentalService.INSTANCE.addCar(car);
 
         return Response.created(
