@@ -22,10 +22,16 @@
     <security-constraint>
         <display-name>Authentication Constraint</display-name>
         <web-resource-collection>
-            <web-resource-name>car-admin</web-resource-name>
+            <web-resource-name>cars-admin</web-resource-name>
             <description/>
             <url-pattern>/cars</url-pattern>
             <http-method>POST</http-method>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>car-admin</web-resource-name>
+            <url-pattern>/cars/*</url-pattern>
+            <http-method>PUT</http-method>
+            <http-method>DELETE</http-method>
         </web-resource-collection>
         <auth-constraint>
             <role-name>cr-admin</role-name>

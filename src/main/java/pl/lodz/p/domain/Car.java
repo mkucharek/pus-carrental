@@ -23,7 +23,6 @@ public class Car {
     }
 
     public Car(String brandName, String modelName, Boolean available) {
-        this.id = id;
         this.brandName = brandName;
         this.modelName = modelName;
         this.available = available;
