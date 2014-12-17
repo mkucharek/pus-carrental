@@ -23,7 +23,6 @@ public class CarsResourceIT {
 
     @Before
     public void setUp() {
-
         cars = ClientBuilder.newClient().target(TestUtil.HOST_URL).path(CARS_PATH);
     }
 
