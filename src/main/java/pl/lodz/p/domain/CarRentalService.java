@@ -99,10 +99,6 @@ public enum CarRentalService {
     }
 
     public void deleteCar(Integer carId) {
-        if (null == CarRentalStore.INSTANCE.getOne(carId)) {
-            throw new CarNotFoundException(carId);
-        }
-
         CarRentalStore.INSTANCE.deleteCar(carId);
     }
 }
