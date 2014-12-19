@@ -6,10 +6,13 @@
 
   <!-- notice no cleartext passwords stored on the server as opposed to BASIC -->
 
-  <!-- generated with $CATALINA_HOME\bin\digest.sh -a SHA admin:Sample_Realm:admin123 -->
+  <!-- generated with $CATALINA_HOME/bin/digest.sh -a SHA admin:Sample_Realm:admin123 -->
   <user username="admin" password="16b68ec9e126960d191b1041fe8ac842ddaa2eab" roles="cr-admin, cr-user"/>
 
-  <!-- generated with $CATALINA_HOME\bin\digest.sh -a SHA user:Sample_Realm:user123 -->
+  <!-- generated with $CATALINA_HOME/bin/digest.sh -a SHA user:Sample_Realm:user123 -->
   <user username="user" password="fa2df976d15e99074a2ffb39a546d3239d2841ac" roles="cr-user"/>
+
+  <!-- generated with $CATALINA_HOME/bin/digest.sh -a SHA unknown:Sample_Realm:unknown123 -->
+  <user username="unknown" password="ed3baeb32678e2a4e7130fbc983fd6a52cae2be5"/>
 
 </tomcat-users>

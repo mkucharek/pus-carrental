@@ -24,7 +24,7 @@ public class CarResourceIT {
     @Test
     public void getShouldReturn200() {
         //setup
-        WebTarget existingCar = CarRentalWebTargetBuilder.newNoAuthTarget().getExistingCar();
+        WebTarget existingCar = CarRentalWebTargetBuilder.newUserAuthorizedTarget().getExistingCar();
 
         //when
         final Response response = existingCar.request().get();
@@ -37,7 +37,7 @@ public class CarResourceIT {
     @Test
     public void getShouldReplyWithETag() {
         //setup
-        WebTarget existingCar = CarRentalWebTargetBuilder.newNoAuthTarget().getExistingCar();
+        WebTarget existingCar = CarRentalWebTargetBuilder.newUserAuthorizedTarget().getExistingCar();
 
         //when
         final Response response = existingCar.request().get();
@@ -49,7 +49,7 @@ public class CarResourceIT {
     @Test
     public void getShouldSupportRequestWithETag() {
         //setup
-        WebTarget existingCar = CarRentalWebTargetBuilder.newNoAuthTarget().getExistingCar();
+        WebTarget existingCar = CarRentalWebTargetBuilder.newUserAuthorizedTarget().getExistingCar();
 
         //setup
         EntityTag eTag = existingCar.request().get().getEntityTag();
@@ -65,7 +65,7 @@ public class CarResourceIT {
     @Test
     public void putShouldReturn401ForUnauthenticatedUser() {
         //setup
-        WebTarget existingCar = CarRentalWebTargetBuilder.newNoAuthTarget().getExistingCar();
+        WebTarget existingCar = CarRentalWebTargetBuilder.newNotAuthenticatedTarget().getExistingCar();
 
         //when
         final Response response = existingCar.request().put(ResourceUtils.ANY_ENTITY);
@@ -103,7 +103,7 @@ public class CarResourceIT {
     @Test
     public void postShouldNotBeAllowed() {
         //setup
-        WebTarget existingCar = CarRentalWebTargetBuilder.newNoAuthTarget().getExistingCar();
+        WebTarget existingCar = CarRentalWebTargetBuilder.newUserAuthorizedTarget().getExistingCar();
 
         //when
         final Response response = existingCar.request().post(ResourceUtils.ANY_ENTITY);
@@ -115,7 +115,7 @@ public class CarResourceIT {
     @Test
     public void deleteShouldReturn401ForUnauthenticatedUser() {
         //setup
-        WebTarget existingCar = CarRentalWebTargetBuilder.newNoAuthTarget().getExistingCar();
+        WebTarget existingCar = CarRentalWebTargetBuilder.newNotAuthenticatedTarget().getExistingCar();
 
         //when
         final Response response = existingCar.request().delete();

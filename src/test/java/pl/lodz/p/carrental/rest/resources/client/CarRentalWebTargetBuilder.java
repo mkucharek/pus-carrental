@@ -17,23 +17,30 @@ public final class CarRentalWebTargetBuilder {
     private static final String USER_USERNAME = "user";
     private static final String USER_PASSWD_CLEARTEXT = "user123";
 
+    private static final String NONUSER_USERNAME = "unknown";
+    private static final String NONUSER_PASSWD_CLEARTEXT = "unknown123";
+
     private WebTarget webTarget;
 
     private CarRentalWebTargetBuilder(Client client) {
         this.webTarget = client.target(ClientUtils.HOST_URL);
     }
 
-    public static CarRentalWebTargetBuilder newNoAuthTarget() {
+    public static CarRentalWebTargetBuilder newNotAuthenticatedTarget() {
         return new CarRentalWebTargetBuilder(ClientBuilder.newClient());
     }
 
-    public static CarRentalWebTargetBuilder newAdminAuthorizedTarget() {
-        return new CarRentalWebTargetBuilder(createDigestAuthClient(ADMIN_USERNAME, ADMIN_PASSWD_CLEARTEXT));
+    public static CarRentalWebTargetBuilder newNotAuthorizedTarget() {
+        return new CarRentalWebTargetBuilder(createDigestAuthClient(NONUSER_USERNAME, NONUSER_PASSWD_CLEARTEXT));
     }
 
     private static Client createDigestAuthClient(String username, String password) {
         return ClientBuilder.newClient()
                 .register(HttpAuthenticationFeature.digest(username, password));
+    }
+
+    public static CarRentalWebTargetBuilder newAdminAuthorizedTarget() {
+        return new CarRentalWebTargetBuilder(createDigestAuthClient(ADMIN_USERNAME, ADMIN_PASSWD_CLEARTEXT));
     }
 
     public static CarRentalWebTargetBuilder newUserAuthorizedTarget() {

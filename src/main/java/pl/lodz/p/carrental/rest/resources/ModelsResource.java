@@ -4,6 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import pl.lodz.p.carrental.core.CarRentalService;
 import pl.lodz.p.carrental.core.Model;
 
+import javax.annotation.security.PermitAll;
 import javax.inject.Singleton;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -15,6 +16,7 @@ import java.util.Collection;
  * @author mkucharek
  */
 @Singleton
+@PermitAll
 @Path("models")
 public class ModelsResource {
 

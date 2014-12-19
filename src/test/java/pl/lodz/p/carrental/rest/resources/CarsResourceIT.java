@@ -21,7 +21,7 @@ public class CarsResourceIT {
     @Test
     public void getShouldReturn200() {
         //setup
-        WebTarget cars = CarRentalWebTargetBuilder.newNoAuthTarget().getCars();
+        WebTarget cars = CarRentalWebTargetBuilder.newUserAuthorizedTarget().getCars();
 
         //when
         final Response response = cars.request().get();
@@ -33,7 +33,7 @@ public class CarsResourceIT {
     @Test
     public void postShouldReturn401ForUnauthenticatedUser() {
         //setup
-        WebTarget cars = CarRentalWebTargetBuilder.newNoAuthTarget().getCars();
+        WebTarget cars = CarRentalWebTargetBuilder.newNotAuthenticatedTarget().getCars();
 
         //when
         final Response response = cars.request().post(Entity.entity(CAR_TO_POST, MediaType.APPLICATION_XML_TYPE));
@@ -103,7 +103,7 @@ public class CarsResourceIT {
     @Test
     public void putShouldNotBeAllowed() {
         //setup
-        WebTarget cars = CarRentalWebTargetBuilder.newNoAuthTarget().getCars();
+        WebTarget cars = CarRentalWebTargetBuilder.newUserAuthorizedTarget().getCars();
 
         //when
         final Response response = cars.request().put(ResourceUtils.ANY_ENTITY);
@@ -115,7 +115,7 @@ public class CarsResourceIT {
     @Test
     public void deleteShouldNotBeAllowed() {
         //setup
-        WebTarget cars = CarRentalWebTargetBuilder.newNoAuthTarget().getCars();
+        WebTarget cars = CarRentalWebTargetBuilder.newUserAuthorizedTarget().getCars();
 
         //when
         final Response response = cars.request().delete();

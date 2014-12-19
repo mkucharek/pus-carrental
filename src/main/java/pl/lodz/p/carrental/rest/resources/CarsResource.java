@@ -7,6 +7,8 @@ import pl.lodz.p.carrental.core.Car;
 import pl.lodz.p.carrental.core.CarNotFoundException;
 import pl.lodz.p.carrental.core.CarRentalService;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -34,6 +36,7 @@ import java.util.Collection;
  */
 @Path("cars")
 @Singleton
+@PermitAll
 public class CarsResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CarsResource.class);
@@ -111,6 +114,7 @@ public class CarsResource {
         return existingCar.hashCode() + "";
     }
 
+    @RolesAllowed({"cr-admin"})
     @POST
     @Consumes({"application/xml", "application/json"})
     public Response addCar(@Context UriInfo uriInfo, @Context SecurityContext sc, Car car) {
@@ -124,6 +128,7 @@ public class CarsResource {
                 .build();
     }
 
+    @RolesAllowed({"cr-admin"})
     @PUT
     @Path("{id}")
     @Consumes({"application/xml", "application/json"})
@@ -157,6 +162,7 @@ public class CarsResource {
 
     }
 
+    @RolesAllowed({"cr-admin"})
     @DELETE
     @Path("{id}")
     public Response deleteCar(@PathParam("id") Integer id) {

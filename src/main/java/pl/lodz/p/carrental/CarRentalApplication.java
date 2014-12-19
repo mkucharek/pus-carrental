@@ -1,6 +1,7 @@
 package pl.lodz.p.carrental;
 
 import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import pl.lodz.p.carrental.core.CarRentalService;
 import pl.lodz.p.carrental.core.CarRentalStore;
 import pl.lodz.p.carrental.core.InMemoryCarRentalStore;
@@ -25,6 +26,8 @@ public class CarRentalApplication extends ResourceConfig {
 
         // setting a package that contains the REST resource classes
         packages("pl.lodz.p.carrental.rest.providers");
+
+        register(RolesAllowedDynamicFeature.class);
 
 
     }

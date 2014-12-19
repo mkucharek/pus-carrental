@@ -22,7 +22,7 @@ public class BrandsResourceIT {
     
     @Before
     public void setUp() {
-        brands = CarRentalWebTargetBuilder.newNoAuthTarget().getBrands();
+        brands = CarRentalWebTargetBuilder.newUserAuthorizedTarget().getBrands();
     }
 
     @Test
