@@ -1,4 +1,4 @@
-package pl.lodz.p.domain;
+package pl.lodz.p.carrental.core;
 
 import jersey.repackaged.com.google.common.base.Predicate;
 import jersey.repackaged.com.google.common.base.Predicates;
@@ -13,11 +13,16 @@ import java.util.Set;
 /**
  * @author mkucharek
  */
-public enum CarRentalService {
-    INSTANCE;
+public class CarRentalService {
+
+    private final CarRentalStore carRentalStore;
+
+    public CarRentalService(CarRentalStore carRentalStore) {
+        this.carRentalStore = carRentalStore;
+    }
 
     public Collection<Car> getAllCars() {
-        return CarRentalStore.INSTANCE.getAllCars();
+        return carRentalStore.getAllCars();
     }
 
     public Collection<Car> getAllCarsFilteredBy(final String brandName,
@@ -44,12 +49,12 @@ public enum CarRentalService {
             }
         };
 
-        return Collections2.filter(CarRentalStore.INSTANCE.getAllCars(),
+        return Collections2.filter(carRentalStore.getAllCars(),
                 Predicates.and(Arrays.asList(brandPredicate, modelPredicate, availablePredicate)));
     }
 
     public Car getCarById(final Integer id) {
-        return CarRentalStore.INSTANCE.getOne(id);
+        return carRentalStore.getOne(id);
     }
 
     public void updateCar(Integer carId, Car car) {
@@ -63,22 +68,18 @@ public enum CarRentalService {
             throw new IllegalArgumentException("carId must match car#getId to perform an update");
         }
 
-        if (null == CarRentalStore.INSTANCE.getOne(carId)) {
+        if (null == carRentalStore.getOne(carId)) {
             throw new CarNotFoundException(carId);
         }
 
         // adjust id
         car.setId(carId);
 
-        CarRentalStore.INSTANCE.update(car);
+        carRentalStore.update(car);
     }
 
     public Set<Brand> getAllBrands() {
-        return CarRentalStore.INSTANCE.getAllBrands();
-    }
-
-    public Set<Model> getAllModels() {
-        return CarRentalStore.INSTANCE.getAllModels();
+        return carRentalStore.getAllBrands();
     }
 
     public Collection<Model> getModelsByBrand(final String brandName) {
@@ -90,15 +91,19 @@ public enum CarRentalService {
         });
     }
 
+    public Set<Model> getAllModels() {
+        return carRentalStore.getAllModels();
+    }
+
     public Integer addCar(Car car) {
         if (null != car.getId()) {
             throw new IllegalArgumentException("Cannot add a car with ID already defined");
         }
 
-        return CarRentalStore.INSTANCE.add(car);
+        return carRentalStore.add(car);
     }
 
     public void deleteCar(Integer carId) {
-        CarRentalStore.INSTANCE.deleteCar(carId);
+        carRentalStore.deleteCar(carId);
     }
 }

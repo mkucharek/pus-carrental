@@ -1,12 +1,13 @@
-package pl.lodz.p.resources;
+package pl.lodz.p.carrental.rest.resources;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.lodz.p.domain.Car;
-import pl.lodz.p.domain.CarNotFoundException;
-import pl.lodz.p.domain.CarRentalService;
+import pl.lodz.p.carrental.core.Car;
+import pl.lodz.p.carrental.core.CarNotFoundException;
+import pl.lodz.p.carrental.core.CarRentalService;
 
+import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -32,9 +33,16 @@ import java.util.Collection;
  * @author mkucharek
  */
 @Path("cars")
+@Singleton
 public class CarsResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CarsResource.class);
+
+    private final CarRentalService carRentalService;
+
+    public CarsResource(CarRentalService carRentalService) {
+        this.carRentalService = carRentalService;
+    }
 
     @GET
     @Produces({"application/xml", "application/json"})
@@ -47,12 +55,14 @@ public class CarsResource {
         final Response.ResponseBuilder rb = Response.ok();
 
         if (StringUtils.isEmpty(brandName) && StringUtils.isEmpty(modelName) && null == available) {
-            rb.entity(new GenericEntity<Collection<Car>>(CarRentalService.INSTANCE.getAllCars()) {});
+            rb.entity(new GenericEntity<Collection<Car>>(carRentalService.getAllCars()) {
+            });
 
         } else {
             rb.entity(
                     new GenericEntity<Collection<Car>>(
-                            CarRentalService.INSTANCE.getAllCarsFilteredBy(brandName, modelName, available)) {});
+                            carRentalService.getAllCarsFilteredBy(brandName, modelName, available)) {
+                    });
         }
 
         rb.link(UriBuilder.fromResource(BrandsResource.class).build(), "brands");
@@ -66,7 +76,7 @@ public class CarsResource {
     @Produces({"application/xml", "application/json"})
     public Response getCar(@PathParam("id") int id, @Context Request request) {
 
-        final Car car = CarRentalService.INSTANCE.getCarById(id);
+        final Car car = carRentalService.getCarById(id);
 
         if (null == car) {
             // CarNotFoundException extends WebApplicationException, so it will be handled by Jersey
@@ -97,11 +107,15 @@ public class CarsResource {
 
     }
 
+    private String computeTag(Car existingCar) {
+        return existingCar.hashCode() + "";
+    }
+
     @POST
     @Consumes({"application/xml", "application/json"})
     public Response addCar(@Context UriInfo uriInfo, @Context SecurityContext sc, Car car) {
 
-        Integer id = CarRentalService.INSTANCE.addCar(car);
+        Integer id = carRentalService.addCar(car);
 
         return Response.created(
                 UriBuilder.fromUri(uriInfo.getRequestUri())
@@ -117,7 +131,7 @@ public class CarsResource {
                               @Context Request request,
                               @PathParam("id") Integer id, Car car) {
 
-        final Car existingCar = CarRentalService.INSTANCE.getCarById(id);
+        final Car existingCar = carRentalService.getCarById(id);
 
         EntityTag existingTag = new EntityTag(computeTag(existingCar));
 
@@ -131,7 +145,7 @@ public class CarsResource {
         LOGGER.debug("ETag matches - performing update");
 
         try {
-            CarRentalService.INSTANCE.updateCar(id, car);
+            carRentalService.updateCar(id, car);
         } catch (NullPointerException e) {
             // wrapping regular exception with WebApplicationException
             throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
@@ -143,15 +157,11 @@ public class CarsResource {
 
     }
 
-    private String computeTag(Car existingCar) {
-        return existingCar.hashCode() + "";
-    }
-
     @DELETE
     @Path("{id}")
     public Response deleteCar(@PathParam("id") Integer id) {
 
-        CarRentalService.INSTANCE.deleteCar(id);
+        carRentalService.deleteCar(id);
 
         return Response.noContent().build();
 

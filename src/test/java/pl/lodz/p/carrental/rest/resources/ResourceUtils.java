@@ -1,4 +1,4 @@
-package pl.lodz.p.resources;
+package pl.lodz.p.carrental.rest.resources;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;

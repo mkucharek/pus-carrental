@@ -1,9 +1,9 @@
-package pl.lodz.p.resources;
+package pl.lodz.p.carrental.rest.resources;
 
 import org.junit.Test;
-import pl.lodz.p.domain.Car;
-import pl.lodz.p.resources.client.CarRentalWebTargetBuilder;
-import pl.lodz.p.resources.client.ClientUtils;
+import pl.lodz.p.carrental.core.Car;
+import pl.lodz.p.carrental.rest.resources.client.CarRentalWebTargetBuilder;
+import pl.lodz.p.carrental.rest.resources.client.ClientUtils;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
@@ -36,7 +36,7 @@ public class CarsResourceIT {
         WebTarget cars = CarRentalWebTargetBuilder.newNoAuthTarget().getCars();
 
         //when
-        final Response response = cars.request().post(ResourceUtils.ANY_ENTITY);
+        final Response response = cars.request().post(Entity.entity(CAR_TO_POST, MediaType.APPLICATION_XML_TYPE));
 
         //then
         assertEquals(Response.Status.UNAUTHORIZED.getStatusCode(), response.getStatus());

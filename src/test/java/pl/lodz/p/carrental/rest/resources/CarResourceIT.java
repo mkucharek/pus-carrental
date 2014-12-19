@@ -1,8 +1,8 @@
-package pl.lodz.p.resources;
+package pl.lodz.p.carrental.rest.resources;
 
 import org.junit.Test;
-import pl.lodz.p.domain.Car;
-import pl.lodz.p.resources.client.CarRentalWebTargetBuilder;
+import pl.lodz.p.carrental.core.Car;
+import pl.lodz.p.carrental.rest.resources.client.CarRentalWebTargetBuilder;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;

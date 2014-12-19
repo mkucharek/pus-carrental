@@ -1,4 +1,4 @@
-package pl.lodz.p.domain;
+package pl.lodz.p.carrental.core;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;

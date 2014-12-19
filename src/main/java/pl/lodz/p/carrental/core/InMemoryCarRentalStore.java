@@ -1,4 +1,4 @@
-package pl.lodz.p.domain;
+package pl.lodz.p.carrental.core;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -11,13 +11,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * @author mkucharek
  */
-enum CarRentalStore {
-    INSTANCE;
+public class InMemoryCarRentalStore implements CarRentalStore {
 
     private final ConcurrentMap<Integer, Car> cars;
     private final AtomicInteger idCounter;
 
-    CarRentalStore() {
+    public InMemoryCarRentalStore() {
         cars = new ConcurrentHashMap<>();
         idCounter = new AtomicInteger(0);
 
@@ -30,14 +29,7 @@ enum CarRentalStore {
         add(new Car("Peugeot", "207", Boolean.FALSE));
     }
 
-    public Collection<Car> getAllCars() {
-        return cars.values();
-    }
-
-    public Car getOne(Integer id) {
-        return cars.get(id);
-    }
-
+    @Override
     public Integer add(Car car) {
         Integer id = idCounter.incrementAndGet();
 
@@ -47,6 +39,17 @@ enum CarRentalStore {
         return id;
     }
 
+    @Override
+    public Collection<Car> getAllCars() {
+        return cars.values();
+    }
+
+    @Override
+    public Car getOne(Integer id) {
+        return cars.get(id);
+    }
+
+    @Override
     public void update(Car car) {
         if (null == car.getId()) {
             throw new IllegalArgumentException("Cannot update a car that has no ID");
@@ -55,6 +58,7 @@ enum CarRentalStore {
         cars.put(car.getId(), car);
     }
 
+    @Override
     public Set<Brand> getAllBrands() {
 
         if (cars.isEmpty()) {
@@ -71,6 +75,7 @@ enum CarRentalStore {
 
     }
 
+    @Override
     public Set<Model> getAllModels() {
 
         if (cars.isEmpty()) {
@@ -87,6 +92,7 @@ enum CarRentalStore {
 
     }
 
+    @Override
     public void deleteCar(Integer carId) {
         cars.remove(carId);
     }

@@ -1,4 +1,4 @@
-package pl.lodz.p.domain;
+package pl.lodz.p.carrental.core;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
