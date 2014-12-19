@@ -46,6 +46,8 @@
 
     <login-config>
         <auth-method>BASIC</auth-method>
+        <!--<auth-method>DIGEST</auth-method>-->
+        <!--<realm-name>Sample_Realm</realm-name>-->
     </login-config>
 
 </web-app>

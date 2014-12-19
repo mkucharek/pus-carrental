@@ -1,10 +1,10 @@
 package pl.lodz.p.resources;
 
-import org.junit.Before;
 import org.junit.Test;
 import pl.lodz.p.domain.Car;
+import pl.lodz.p.resources.client.CarRentalWebTargetBuilder;
+import pl.lodz.p.resources.client.ClientUtils;
 
-import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
@@ -16,100 +16,112 @@ import static org.junit.Assert.assertTrue;
 
 public class CarsResourceIT {
 
-    private static final String CARS_PATH = "cars";
     private static final Car CAR_TO_POST = new Car("audi", "A15", true);
-
-    private WebTarget cars;
-
-    @Before
-    public void setUp() {
-        cars = ClientBuilder.newClient().target(TestUtil.HOST_URL).path(CARS_PATH);
-    }
 
     @Test
     public void getShouldReturn200() {
+        //setup
+        WebTarget cars = CarRentalWebTargetBuilder.newNoAuthTarget().getCars();
+
         //when
         final Response response = cars.request().get();
 
         //then
-        assertEquals(200, response.getStatus());
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void postShouldReturn401ForUnauthenticatedUser() {
+        //setup
+        WebTarget cars = CarRentalWebTargetBuilder.newNoAuthTarget().getCars();
+
         //when
-        final Response response = cars.request().post(TestUtil.ANY_ENTITY);
+        final Response response = cars.request().post(ResourceUtils.ANY_ENTITY);
 
         //then
-        assertEquals(401, response.getStatus()); // 401 Unauthorized expected
+        assertEquals(Response.Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void postShouldReturn403ForNonAdminUser() {
+        //setup
+        WebTarget cars = CarRentalWebTargetBuilder.newBasicAuthUserTarget().getCars();
+
         //when
         final Response response = cars.request()
-                .header("Authorization", "Basic dXNlcjp1c2Vy")
                 .post(Entity.entity(CAR_TO_POST, MediaType.APPLICATION_XML_TYPE));
 
         //then
-        assertEquals(403, response.getStatus()); // 403 Forbidden expected
+        assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void postShouldCreateCarForAdminUserWithXml() {
+        //setup
+        WebTarget cars = CarRentalWebTargetBuilder.newBasicAuthAdminTarget().getCars();
+
         //when
         final Response response = cars.request()
-                .header("Authorization", "Basic YWRtaW46YWRtaW4=")
                 .post(Entity.entity(CAR_TO_POST, MediaType.APPLICATION_XML_TYPE));
 
         //then
-        assertEquals(201, response.getStatus()); // 201 Created expected
+        assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
         assertNotNull(response.getLocation());
-        assertTrue(response.getLocation().toString().contains(TestUtil.HOST_URL));
-        assertTrue(response.getLocation().getPath().contains(CARS_PATH));
+        assertTrue(response.getLocation().toString().contains(ClientUtils.HOST_URL));
+        assertTrue(response.getLocation().getPath().contains(ClientUtils.CARS_PATH));
     }
 
     @Test
     public void postShouldCreateCarForAdminUserWithJSON() {
+        //setup
+        WebTarget cars = CarRentalWebTargetBuilder.newBasicAuthAdminTarget().getCars();
+
         //when
         final Response response = cars.request()
-                .header("Authorization", "Basic YWRtaW46YWRtaW4=")
                 .post(Entity.entity(CAR_TO_POST, MediaType.APPLICATION_JSON_TYPE));
 
         //then
-        assertEquals(201, response.getStatus()); // 201 Created expected
+        assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
         assertNotNull(response.getLocation());
-        assertTrue(response.getLocation().toString().contains(TestUtil.HOST_URL));
-        assertTrue(response.getLocation().getPath().contains(CARS_PATH));
+        assertTrue(response.getLocation().toString().contains(ClientUtils.HOST_URL));
+        assertTrue(response.getLocation().getPath().contains(ClientUtils.CARS_PATH));
     }
 
     @Test
     public void postShouldReturn415WhenNotJsonNorXml() {
+        //setup
+        WebTarget cars = CarRentalWebTargetBuilder.newBasicAuthAdminTarget().getCars();
+
         //when
         final Response response = cars.request()
-                .header("Authorization", "Basic YWRtaW46YWRtaW4=")
-                .post(TestUtil.ANY_ENTITY);
+                .post(ResourceUtils.ANY_ENTITY);
 
         //then
-        assertEquals(415, response.getStatus()); // 415 Unsupported Media Type expected
+        assertEquals(Response.Status.UNSUPPORTED_MEDIA_TYPE.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void putShouldNotBeAllowed() {
+        //setup
+        WebTarget cars = CarRentalWebTargetBuilder.newNoAuthTarget().getCars();
+
         //when
-        final Response response = cars.request().put(TestUtil.ANY_ENTITY);
+        final Response response = cars.request().put(ResourceUtils.ANY_ENTITY);
 
         //then
-        assertEquals(405, response.getStatus()); // 405 Method Not Allowed expected
+        assertEquals(Response.Status.METHOD_NOT_ALLOWED.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void deleteShouldNotBeAllowed() {
+        //setup
+        WebTarget cars = CarRentalWebTargetBuilder.newNoAuthTarget().getCars();
+
         //when
         final Response response = cars.request().delete();
 
         //then
-        assertEquals(405, response.getStatus()); // 405 Method Not Allowed expected
+        assertEquals(Response.Status.METHOD_NOT_ALLOWED.getStatusCode(), response.getStatus());
     }
 
 }

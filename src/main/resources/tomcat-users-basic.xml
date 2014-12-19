@@ -4,7 +4,7 @@
   <role rolename="cr-user"/>
   <role rolename="cr-admin"/>
   
-  <user username="admin" password="admin" roles="cr-admin, cr-user"/>
-  <user username="user" password="user" roles="cr-user"/>
+  <user username="admin" password="admin123" roles="cr-admin, cr-user"/>
+  <user username="user" password="user123" roles="cr-user"/>
 
 </tomcat-users>
