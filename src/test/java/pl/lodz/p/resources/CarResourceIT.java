@@ -77,7 +77,7 @@ public class CarResourceIT {
     @Test
     public void putShouldReturn403ForNonAdminUser() {
         //setup
-        WebTarget existingCar = CarRentalWebTargetBuilder.newBasicAuthUserTarget().getExistingCar();
+        WebTarget existingCar = CarRentalWebTargetBuilder.newUserAuthorizedTarget().getExistingCar();
 
         //when
         final Response response = existingCar.request()
@@ -90,7 +90,7 @@ public class CarResourceIT {
     @Test
     public void putShouldCreateCarForAdminUserWithXml() {
         //setup
-        WebTarget existingCar = CarRentalWebTargetBuilder.newBasicAuthAdminTarget().getExistingCar();
+        WebTarget existingCar = CarRentalWebTargetBuilder.newAdminAuthorizedTarget().getExistingCar();
 
         //when
         final Response response = existingCar.request()
@@ -127,7 +127,7 @@ public class CarResourceIT {
     @Test
     public void deleteShouldReturn403ForNonAdminUser() {
         //setup
-        WebTarget existingCar = CarRentalWebTargetBuilder.newBasicAuthUserTarget().getExistingCar();
+        WebTarget existingCar = CarRentalWebTargetBuilder.newUserAuthorizedTarget().getExistingCar();
 
         //when
         final Response response = existingCar.request()
@@ -140,7 +140,7 @@ public class CarResourceIT {
     @Test
     public void deleteShouldDeleteCarForAdminUser() {
         //setup
-        WebTarget carToDelete = CarRentalWebTargetBuilder.newBasicAuthAdminTarget().getCarToDelete();
+        WebTarget carToDelete = CarRentalWebTargetBuilder.newAdminAuthorizedTarget().getCarToDelete();
 
         //when
         final Response response = carToDelete.request()

@@ -43,17 +43,17 @@ public final class CarRentalWebTargetBuilder {
         return new CarRentalWebTargetBuilder(ClientBuilder.newClient());
     }
 
-    public static CarRentalWebTargetBuilder newBasicAuthAdminTarget() {
-        return new CarRentalWebTargetBuilder(createBasicAuthClient(ADMIN_USERNAME, ADMIN_PASSWD_CLEARTEXT));
+    public static CarRentalWebTargetBuilder newAdminAuthorizedTarget() {
+        return new CarRentalWebTargetBuilder(createDigestAuthClient(ADMIN_USERNAME, ADMIN_PASSWD_CLEARTEXT));
     }
 
-    public static CarRentalWebTargetBuilder newBasicAuthUserTarget() {
-        return new CarRentalWebTargetBuilder(createBasicAuthClient(USER_USERNAME, USER_PASSWD_CLEARTEXT));
+    public static CarRentalWebTargetBuilder newUserAuthorizedTarget() {
+        return new CarRentalWebTargetBuilder(createDigestAuthClient(USER_USERNAME, USER_PASSWD_CLEARTEXT));
     }
 
-    private static Client createBasicAuthClient(String username, String password) {
+    private static Client createDigestAuthClient(String username, String password) {
         return ClientBuilder.newClient()
-                .register(HttpAuthenticationFeature.basic(username, password));
+                .register(HttpAuthenticationFeature.digest(username, password));
     }
 
 }

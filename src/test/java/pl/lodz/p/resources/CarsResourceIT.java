@@ -45,7 +45,7 @@ public class CarsResourceIT {
     @Test
     public void postShouldReturn403ForNonAdminUser() {
         //setup
-        WebTarget cars = CarRentalWebTargetBuilder.newBasicAuthUserTarget().getCars();
+        WebTarget cars = CarRentalWebTargetBuilder.newUserAuthorizedTarget().getCars();
 
         //when
         final Response response = cars.request()
@@ -58,7 +58,7 @@ public class CarsResourceIT {
     @Test
     public void postShouldCreateCarForAdminUserWithXml() {
         //setup
-        WebTarget cars = CarRentalWebTargetBuilder.newBasicAuthAdminTarget().getCars();
+        WebTarget cars = CarRentalWebTargetBuilder.newAdminAuthorizedTarget().getCars();
 
         //when
         final Response response = cars.request()
@@ -74,7 +74,7 @@ public class CarsResourceIT {
     @Test
     public void postShouldCreateCarForAdminUserWithJSON() {
         //setup
-        WebTarget cars = CarRentalWebTargetBuilder.newBasicAuthAdminTarget().getCars();
+        WebTarget cars = CarRentalWebTargetBuilder.newAdminAuthorizedTarget().getCars();
 
         //when
         final Response response = cars.request()
@@ -90,7 +90,7 @@ public class CarsResourceIT {
     @Test
     public void postShouldReturn415WhenNotJsonNorXml() {
         //setup
-        WebTarget cars = CarRentalWebTargetBuilder.newBasicAuthAdminTarget().getCars();
+        WebTarget cars = CarRentalWebTargetBuilder.newAdminAuthorizedTarget().getCars();
 
         //when
         final Response response = cars.request()

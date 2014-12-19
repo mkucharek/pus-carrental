@@ -4,6 +4,8 @@
   <role rolename="cr-user"/>
   <role rolename="cr-admin"/>
 
+  <!-- notice no cleartext passwords stored on the server as opposed to BASIC -->
+
   <!-- generated with $CATALINA_HOME\bin\digest.sh -a SHA admin:Sample_Realm:admin123 -->
   <user username="admin" password="16b68ec9e126960d191b1041fe8ac842ddaa2eab" roles="cr-admin, cr-user"/>
 
